@@ -1,0 +1,11 @@
+build/
+.env
+.env.local
+# Keep .env.example committed as a template
+*.gguf
+# Stale Python artifacts (project is Go)
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+dist/

@@ -1,0 +1,4 @@
+startCommand:
+  type: stdio
+  configSchema: {}
+  commandFunction: ["./build/sentinel", "serve"]
