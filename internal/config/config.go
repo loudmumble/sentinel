@@ -42,7 +42,7 @@ type OllamaConfig struct {
 
 // DefaultOllamaConfig returns OllamaConfig with environment-aware defaults.
 func DefaultOllamaConfig() OllamaConfig {
-	defaultModel := getEnv("SENTINEL_MODEL", "hog-security-v2")
+	defaultModel := getEnv("SENTINEL_MODEL", "llama3.2")
 	return OllamaConfig{
 		BaseURL:             getEnv("OLLAMA_URL", "http://localhost:11434"),
 		Model:               defaultModel,

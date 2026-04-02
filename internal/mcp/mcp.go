@@ -129,8 +129,9 @@ func CollectEvents(cfg config.SentinelConfig, probeNames []string, pidFilter int
 		for _, res := range results {
 			allResults = append(allResults, map[string]interface{}{
 				"type":     res["event_type"],
-				"severity": res["severity"],
-				"message":  fmt.Sprintf("%v", res),
+				"score":    res["score"],
+				"severity": scoreToSeverity(res),
+				"event":    res,
 			})
 		}
 		time.Sleep(500 * time.Millisecond)
@@ -354,4 +355,25 @@ func (s *Server) writeError(id interface{}, code int, message string) {
 	resp := map[string]interface{}{"jsonrpc": "2.0", "id": id, "error": map[string]interface{}{"code": code, "message": message}}
 	data, _ := json.Marshal(resp)
 	fmt.Fprintln(s.writer, string(data))
+}
+
+// scoreToSeverity maps an event's score to a severity string.
+func scoreToSeverity(event map[string]interface{}) string {
+	score := 0
+	switch v := event["score"].(type) {
+	case int:
+		score = v
+	case float64:
+		score = int(v)
+	}
+	switch {
+	case score >= 90:
+		return "critical"
+	case score >= 70:
+		return "high"
+	case score >= 40:
+		return "medium"
+	default:
+		return "low"
+	}
 }
